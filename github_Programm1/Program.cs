@@ -12,13 +12,14 @@ namespace github_Programm1
         {
 
             toDoManager toDoManager = new toDoManager();
+            Task task = new Task();
 
             while (true)
             {
 
                 Console.WriteLine("Hier kannst du die nächste Aufgabe notieren\n" +
-                                  "[1] Aufgabe hinzufügen"
-                              + "\n[2] Aufgabe entfernen" +
+                                  "[1] Aufgabe hinzufügen\n"
+                                + "[2] Aufgabe entfernen\n" +
                                   "[3] Aufgaben anzeigen"
                                  );
 
@@ -43,20 +44,50 @@ namespace github_Programm1
 
             }
 
-
         }
 
         class toDoManager
         {
             private List<Task> tasks;
+            private Task task;
             public toDoManager()
             {
                 tasks = new List<Task>();
+                task = new Task();
             }
             public void AddTask()
             {
+                
+                bool repeat = false;
 
 
+                    try
+                    {
+                        Console.WriteLine("Gib bitte die Aufgabenbeschreibung ein");
+                        string description = Console.ReadLine();
+                        task.Description = description;
+                    }
+                    catch (FormatException ex)
+                    {
+                        Console.WriteLine($"Fehler beim Hinzufügen der Aufgabe: {ex.Message}");
+                    }               
+
+                    Console.WriteLine("Gib bitte noch an, ob die Aufgabe abgeschlossen\n"                     
+                                      + "Für abgeschlossen [True]\n" 
+                                      + "Für nicht abgeschlossen [False]"
+                                    );
+                    try
+                    {
+                        bool isCompleted = Convert.ToBoolean(Console.ReadLine());
+                        task.IsCompleted = isCompleted;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Ungültige Eingabe. Bitte gib 'True' oder 'False' ein.");
+                        return;
+                    }                
+
+                    tasks.Add(task);
 
             }
             public void RemoveTask()
@@ -67,8 +98,10 @@ namespace github_Programm1
             }
             public void DisplayTasks()
             {
-
-
+                foreach (var task in tasks)
+                {
+                    Console.WriteLine($"Aufgabe: {task.Description}, Abgeschlossen: {task.IsCompleted}");
+                }
 
             }
         }
@@ -79,10 +112,9 @@ namespace github_Programm1
             public bool IsCompleted { get; set; }
 
 
-            public Task(string description)
+            public Task()
             {
-                Description = description;
-                IsCompleted = false;
+               
             }
             public void MarkAsCompleted()
             {
